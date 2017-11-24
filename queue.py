@@ -13,11 +13,17 @@ class queue:
         pass
 
     def qs(self):
+        qs_keys = ["queue","user","jobid","status",\
+                   "proc","thrd","core","mem","time"]
+
         qs_rawresult = sbp.check_output('qs')
         
         job_list = qs_rawresult.split('\n')
-        qs_result = [mystr.split() for mystr in job_list[1:-1]]
+        qs_list = [mystr.split() for mystr in job_list[1:-1]]
 
+        qs_result = [dict(zip(qs_keys,qs_list[i])) \
+                     for i in range(len(qs_list))]
+        
         return qs_result
         
     def qstat(self):
