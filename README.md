@@ -3,7 +3,7 @@
 Python2.7 tools for kudpc(Kyoto-univ supercomputer system).
 
 # installation
-Clone onto $PYTHONPATH place. 
+Put onto $PYTHONPATH place directly. 
 
 # Usage
 ## functions
