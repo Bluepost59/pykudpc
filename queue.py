@@ -14,7 +14,7 @@ class queue:
 
     def qs(self):
         qs_keys = ["queue","user","jobid","status",\
-                   "proc","thrd","core","mem","time"]
+                   "proc","thread","core","memory","time"]
 
         qs_rawresult = sbp.check_output('qs')
         
@@ -27,17 +27,31 @@ class queue:
         return qs_result
         
     def qstat(self):
+        keys = ["jobid","name","user","time","s","queue"]
+        
         qstat_rawresult = sbp.check_output('qstat')
         qstat_list = qstat_rawresult.split('\n')
         qstat_result = [mystr.split() for mystr in qstat_list[2:-1]]
+        
+        return [dict(zip(keys,qstat_result[i])) \
+                for i in range(len(qstat_result)) ]
 
-        return qstat_result
-    
     def qstatq(self):
+        keys = ["queue","memory","cputime","walltime","node",\
+                "run","que","lm","state"]
+
         qstatq_rawresult = sbp.check_output('qstat -q', shell=True)
-        qstatq_list = qstatq_rawresult.split("\n")
-        qstatq_result = [mystr.split() for mystr in qstatq_list[2:-1]]
-        return qstatq_result
+        qstatq_linelist = qstatq_rawresult.split("\n")
+
+        len_list = [len(mystr) for mystr in qstatq_linelist[1].split()]
+        pos_list = [sum(len_list[:i]) + i for i in range(len(len_list)+1)]
+        
+        qstatq_result = [ [ mystr[pos_list[i]:pos_list[i+1]].strip()\
+                            for i in range(len(len_list))] \
+                          for mystr in qstatq_linelist[2:-1]]
+    
+        return [dict(zip(keys,mydata)) \
+                for mydata in qstatq_result]
 
     def qdel(self,job):
         sbp.call('qdel ' + job, shell=True)
