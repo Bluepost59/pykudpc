@@ -18,7 +18,7 @@ return type:list of dicts
 return type:list of dict
 
 ### qstatq()
-return type:list of dict
+return type:list of dict  
 This is equivalent to command "qstat -q".
 
 ### qdel(jobid)
@@ -39,7 +39,7 @@ Ex.Execute file "mybin"
 
 ```python:
 myobj = pykudpc.run()
-myobj.tssrun(mybin, p=4,t=1,c=1)
+myobj.tssrun("mybin", p=4,t=1,c=1)
 ```
 
 ### submit
